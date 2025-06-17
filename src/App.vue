@@ -1,26 +1,55 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <the-header />
+  <div class="container">
+    <big-container>
+      <main-location />
+    </big-container>
+
+    <neighbour-location />
+  </div>
+  <the-footer />
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import TheHeader from "./components/Section/TheHeader.vue";
+import TheFooter from "./components/Section/TheFooter.vue";
+import NeighbourLocation from "./components/Location/NeighbourLocation.vue";
+import MainLocation from "./components/Location/MainLocation.vue";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    TheHeader,
+    TheFooter,
+    NeighbourLocation,
+    MainLocation,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  /* padding: 2rem; */
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+}
+</style>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  min-height: 100vh;
+  color: #333;
+  overflow-x: hidden;
 }
 </style>
