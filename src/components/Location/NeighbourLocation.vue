@@ -3,10 +3,10 @@
     <h2 class="section-title">🌍 Nearby Locations</h2>
     <div class="nearby-cards">
       <div v-for="(neighbour, ind) in neighbours" :key="ind">
-        <big-container class="neighbour-card">
+        <big-container>
           <div class="nearby-location">{{ neighbour.name }}</div>
           <div class="weather-icon">{{ neighbour.icon }}</div>
-          <div class="nearby-temp">{{ neighbour.temp }}</div>
+          <div class="nearby-temp">{{ neighbour.temp }}°</div>
           <div class="nearby-condition">{{ neighbour.condition }}</div>
         </big-container>
       </div>
@@ -84,6 +84,24 @@ export default {
   overflow-x: auto;
   padding: 1rem 0;
   scroll-behavior: smooth;
+}
+.nearby-cards::-webkit-scrollbar {
+  height: 8px;
+}
+
+.nearby-cards::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.nearby-cards::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+.weather-icon {
+  font-size: 5rem;
+  text-align: center;
+  animation: bounce 2s infinite;
 }
 
 .nearby-location {

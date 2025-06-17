@@ -1,11 +1,7 @@
 <template>
   <the-header />
   <div class="container">
-    <big-container>
-      <main-location />
-    </big-container>
-
-    <neighbour-location />
+    <main-location />
   </div>
   <the-footer />
 </template>
@@ -13,14 +9,13 @@
 <script>
 import TheHeader from "./components/Section/TheHeader.vue";
 import TheFooter from "./components/Section/TheFooter.vue";
-import NeighbourLocation from "./components/Location/NeighbourLocation.vue";
 import MainLocation from "./components/Location/MainLocation.vue";
 
 export default {
   components: {
     TheHeader,
     TheFooter,
-    NeighbourLocation,
+    // NeighbourLocation,
     MainLocation,
   },
 };
