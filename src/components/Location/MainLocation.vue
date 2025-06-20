@@ -17,7 +17,9 @@
     </button>
   </div>
 
-  <h2 v-if="isLoading" style><center>Fetching Data...</center></h2>
+  <h2 v-if="isLoading" style="color: white">
+    <center>Fetching Data...</center>
+  </h2>
   <big-container v-else>
     <div class="location-info">
       <h1 class="location-name">{{ apiResponses.city }}</h1>
