@@ -1,9 +1,12 @@
 <template>
   <div>
     <the-header />
-
     <div class="container">
-      <main-location />
+      <main-location
+        @location-info="takeLocation"
+        :isLoading="isLoading"
+        :apiResponse="fetchedRes"
+      />
       <hour-forecast />
       <days-forecast />
       <neighbour-location />
@@ -28,6 +31,45 @@ export default {
     TheFooter,
     DaysForecast,
     MainLocation,
+  },
+
+  data() {
+    return {
+      location: "Kolkata",
+      isLoading: false,
+      apiResponse: [],
+      fetchedRes: {},
+    };
+  },
+
+  methods: {
+    takeLocation(getLocation) {
+      this.location = getLocation;
+      this.apiCall();
+    },
+
+    async apiCall() {
+      this.isLoading = true;
+      try {
+        const response = await fetch(
+          `http://api.weatherapi.com/v1/forecast.json?key=58eea9fae1ea43b4b0b125004251606&q=${this.location}&days=5&aqi=no&alerts=no`
+        );
+
+        if (!response.ok)
+          throw new Error(`HTTP error! status: ${response.status}`);
+
+        this.fetchedRes = await response.json();
+        console.log(this.location);
+        console.log(this.fetchedRes.location);
+      } catch (err) {
+        console.error("Error fetching weather data : " + err);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
+  created() {
+    this.apiCall();
   },
 };
 </script>

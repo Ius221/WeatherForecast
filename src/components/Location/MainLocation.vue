@@ -20,6 +20,7 @@
   <h2 v-if="isLoading" style="color: white">
     <center>Fetching Data...</center>
   </h2>
+
   <big-container v-else>
     <div class="location-info">
       <h1 class="location-name">{{ apiResponses.city }}</h1>
@@ -55,93 +56,87 @@
 
 <script>
 export default {
+  props: ["isLoading", "apiResponse"],
   data() {
     return {
       otherDetails: [],
-      enteredLocation: "Kolkata",
+      enteredLocation: "",
       apiResponses: {},
-      isLoading: false,
       imgSrc: "",
     };
   },
 
+  watch: {
+    apiResponse: {
+      handler(newVal) {
+        if (newVal && Object.keys(newVal).length > 0) {
+          this.updateWeatherDetails(newVal);
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
+
   methods: {
     async ResponseEdited() {
-      this.isLoading = true;
-      let tempObj = {};
-      let tempArr = [];
-      let fetchedRes = {};
+      this.$emit("location-info", this.enteredLocation);
+      this.enteredLocation = "";
+    },
+    updateWeatherDetails(fetchedRes) {
+      let tempObj = {
+        city: fetchedRes.location.name,
+        fullLocation:
+          fetchedRes.location.region + ", " + fetchedRes.location.country,
+        currTemp: fetchedRes.current.temp_c,
+        currStatus: fetchedRes.current.condition.text,
+        feels: fetchedRes.current.feelslike_c,
+        imgcode: fetchedRes.current.condition.code,
+        img: fetchedRes.current.condition.icon,
+      };
+
+      let tempArr = [
+        {
+          label: "Wind Speed",
+          value: fetchedRes.current.wind_kph + " km/h",
+        },
+        {
+          label: "Pressure",
+          value: fetchedRes.current.pressure_mb + " mb",
+        },
+        {
+          label: "Visibility",
+          value: fetchedRes.current.vis_km + " km",
+        },
+        {
+          label: "Cloud",
+          value: fetchedRes.current.cloud + "%",
+        },
+        {
+          label: "Heat Index",
+          value: fetchedRes.current.heatindex_c + "°",
+        },
+        {
+          label: "Humidity",
+          value: fetchedRes.current.humidity + "%",
+        },
+      ];
+
+      this.apiResponses = tempObj;
+      this.otherDetails = tempArr;
 
       try {
-        const response = await fetch(
-          `http://api.weatherapi.com/v1/forecast.json?key=58eea9fae1ea43b4b0b125004251606&q=${this.enteredLocation}&days=5&aqi=no&alerts=no`
-        );
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        fetchedRes = await response.json();
-        this.enteredLocation = "";
-
-        tempObj = {
-          city: fetchedRes.location.name,
-          fullLocation:
-            fetchedRes.location.region + ", " + fetchedRes.location.country,
-          currTemp: fetchedRes.current.temp_c,
-          currStatus: fetchedRes.current.condition.text,
-          feels: fetchedRes.current.feelslike_c,
-          imgcode: fetchedRes.current.condition.code,
-          img: fetchedRes.current.condition.icon,
-        };
-
-        tempArr = [
-          {
-            label: "Wind Speed",
-            value: fetchedRes.current.wind_kph + " km/h",
-          },
-          {
-            label: "Pressure",
-            value: fetchedRes.current.pressure_mb + " mb",
-          },
-          {
-            label: "Visibility",
-            value: fetchedRes.current.vis_km + " km",
-          },
-          {
-            label: "Cloud",
-            value: fetchedRes.current.cloud + "%",
-          },
-          {
-            label: "Heat Index",
-            value: fetchedRes.current.heatindex_c + "°",
-          },
-          {
-            label: "Humidity",
-            value: fetchedRes.current.humidity + "%",
-          },
-        ];
-
-        this.apiResponses = tempObj;
-        this.otherDetails = tempArr;
-
-        try {
-          this.imgSrc = require(`@/assets/${tempObj.imgcode}.png`);
-        } catch (e) {
-          console.warn("Weather icon not found, using fallback:", e);
-          this.imgSrc = this.apiResponses.img;
-        }
-      } catch (error) {
-        console.error("Error fetching weather data:", error);
-      } finally {
-        this.isLoading = false;
+        this.imgSrc = require(`@/assets/${tempObj.imgcode}.png`);
+      } catch (e) {
+        console.warn("Weather icon not found, using fallback:", e);
+        this.imgSrc = this.apiResponses.img;
       }
     },
   },
 
-  created() {
-    this.ResponseEdited();
-  },
+  // created() {
+  //   this.ResponseEdited();
+  // },
 };
 </script>
 
