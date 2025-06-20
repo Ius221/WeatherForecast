@@ -68,7 +68,7 @@ export default {
 
 <style>
 .nearby-section {
-  margin-bottom: 3rem;
+  padding: 35px 0;
 }
 .section-title {
   font-size: 1.8rem;

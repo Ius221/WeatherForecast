@@ -51,16 +51,10 @@
       </div>
     </div>
   </big-container>
-  <neighbour-location v-if="!isLoading" />
 </template>
 
 <script>
-import NeighbourLocation from "./NeighbourLocation.vue";
-
 export default {
-  components: {
-    NeighbourLocation,
-  },
   data() {
     return {
       otherDetails: [],
@@ -80,7 +74,7 @@ export default {
 
       try {
         const response = await fetch(
-          `http://api.weatherapi.com/v1/forecast.json?key=58eea9fae1ea43b4b0b125004251606&q=${this.enteredLocation}&days=1&aqi=no&alerts=no`
+          `http://api.weatherapi.com/v1/forecast.json?key=58eea9fae1ea43b4b0b125004251606&q=${this.enteredLocation}&days=5&aqi=no&alerts=no`
         );
 
         if (!response.ok) {
@@ -131,7 +125,6 @@ export default {
         this.apiResponses = tempObj;
         this.otherDetails = tempArr;
 
-        // Set image source after we have the API response
         try {
           this.imgSrc = require(`@/assets/${tempObj.imgcode}.png`);
         } catch (e) {
@@ -140,7 +133,6 @@ export default {
         }
       } catch (error) {
         console.error("Error fetching weather data:", error);
-        // You might want to show an error message to the user here
       } finally {
         this.isLoading = false;
       }

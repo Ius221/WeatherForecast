@@ -1,38 +1,36 @@
 <template>
-  <the-header />
-  <div class="container">
-    <main-location />
+  <div>
+    <the-header />
+
+    <div class="container">
+      <main-location />
+      <hour-forecast />
+      <days-forecast />
+      <neighbour-location />
+    </div>
+    <the-footer />
   </div>
-  <the-footer />
 </template>
 
 <script>
 import TheHeader from "./components/Section/TheHeader.vue";
 import TheFooter from "./components/Section/TheFooter.vue";
 import MainLocation from "./components/Location/MainLocation.vue";
+import NeighbourLocation from "./components/Location/NeighbourLocation.vue";
+import DaysForecast from "./components/forecast/DaysForecast.vue";
+import HourForecast from "./components/forecast/HourForecast.vue";
 
 export default {
   components: {
     TheHeader,
+    HourForecast,
+    NeighbourLocation,
     TheFooter,
-    // NeighbourLocation,
+    DaysForecast,
     MainLocation,
   },
 };
 </script>
-
-<style>
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  /* padding: 2rem; */
-}
-@media (max-width: 768px) {
-  .container {
-    padding: 1rem;
-  }
-}
-</style>
 
 <style>
 * {
@@ -46,5 +44,15 @@ body {
   min-height: 100vh;
   color: #333;
   overflow-x: hidden;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  /* padding: 2rem; */
+}
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
 }
 </style>
