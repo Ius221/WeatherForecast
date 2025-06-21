@@ -11,7 +11,9 @@
       >
         <div class="time-label">{{ greet(hour.time) }}</div>
         <div class="time-value">{{ hour.time }}</div>
-        <div class="weather-icon">⛅</div>
+        <div class="weather-icon">
+          <img :src="imgSrcMet(ind)" height="100px" />
+        </div>
         <div class="temperature">{{ hour.temp }}°C</div>
         <div class="feels-like">Feels like {{ hour.feelLike }}°C</div>
         <div class="weather-desc">{{ hour.desc }}</div>
@@ -40,6 +42,7 @@ export default {
   data() {
     return {
       inHours: [],
+      // imgSrc: "",
     };
   },
   watch: {
@@ -70,6 +73,7 @@ export default {
           time: common.hour[i].time.slice(-5),
           temp: common.hour[i].temp_c,
           feelLike: common.hour[i].feelslike_c,
+          imgCode: common.hour[i].condition.code,
           icon: common.hour[i].condition.icon,
           desc: common.hour[i].condition.text,
           humidity: common.hour[i].humidity,
@@ -79,10 +83,8 @@ export default {
         tempArr.push(tempObj);
       }
       this.inHours = tempArr;
-      console.log(this.inHours);
     },
     greet(abc) {
-      console.log(typeof abc, abc);
       if (abc >= "04:00" && abc <= "06:00") return "Dawn";
       if (abc >= "07:00" && abc <= "11:00") return "Morning";
       if (abc >= "12:00" && abc <= "16:00") return "Afternoon";
@@ -96,8 +98,10 @@ export default {
       if (abc >= "00:00" && abc <= "06:00") return "night-time";
       else return "";
     },
+    imgSrcMet(abc) {
+      return this.inHours[abc].icon;
+    },
   },
-
 };
 </script>
 

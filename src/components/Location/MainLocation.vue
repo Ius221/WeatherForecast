@@ -134,9 +134,6 @@ export default {
     },
   },
 
-  // created() {
-  //   this.ResponseEdited();
-  // },
 };
 </script>
 
