@@ -1,6 +1,6 @@
 <template>
   <!-- <div class="nearby-section"></div> -->
-  <div class="forecast-container">
+  <div class="forecast-container" v-if="!isLoading">
     <h1 class="section-title">❄️ WeatherOutlook</h1>
     <ul class="forecast-list">
       <li class="forecast-item">
@@ -126,7 +126,9 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["isLoading"],
+};
 </script>
 
 <style scoped>

@@ -7,9 +7,9 @@
         :isLoading="isLoading"
         :apiResponse="fetchedRes"
       />
-      <hour-forecast />
-      <days-forecast />
-      <neighbour-location />
+      <hour-forecast :isLoading="isLoading" :apiResponse="fetchedRes" />
+      <days-forecast :isLoading="isLoading" />
+      <neighbour-location :isLoading="isLoading" />
     </div>
     <the-footer />
   </div>
@@ -59,8 +59,6 @@ export default {
           throw new Error(`HTTP error! status: ${response.status}`);
 
         this.fetchedRes = await response.json();
-        console.log(this.location);
-        console.log(this.fetchedRes.location);
       } catch (err) {
         console.error("Error fetching weather data : " + err);
       } finally {

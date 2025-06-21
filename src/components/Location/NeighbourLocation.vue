@@ -1,5 +1,5 @@
 <template>
-  <div class="nearby-section">
+  <div class="nearby-section" v-if="!isLoading">
     <h2 class="section-title">🌍 Nearby Locations</h2>
     <div class="nearby-cards">
       <div v-for="(neighbour, ind) in neighbours" :key="ind">
@@ -16,6 +16,8 @@
 
 <script>
 export default {
+  props: ["isLoading"],
+
   data() {
     return {
       neighbours: [

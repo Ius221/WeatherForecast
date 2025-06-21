@@ -1,119 +1,32 @@
 <template>
-  <div class="forecast-container">
+  <div class="forecast-container" v-if="!isLoading">
     <h1 class="section-title">📅 Forecast timeline</h1>
 
     <ul class="forecast-grid">
-      <li class="time-forecast">
-        <div class="time-label">Afternoon</div>
-        <div class="time-value">3:00 PM</div>
+      <li
+        class="time-forecast"
+        v-for="(hour, ind) in inHours"
+        :class="nightClass(hour.time)"
+        :key="ind"
+      >
+        <div class="time-label">{{ greet(hour.time) }}</div>
+        <div class="time-value">{{ hour.time }}</div>
         <div class="weather-icon">⛅</div>
-        <div class="temperature">30°C</div>
-        <div class="feels-like">Feels like 34°C</div>
-        <div class="weather-desc">Mostly cloudy</div>
+        <div class="temperature">{{ hour.temp }}°C</div>
+        <div class="feels-like">Feels like {{ hour.feelLike }}°C</div>
+        <div class="weather-desc">{{ hour.desc }}</div>
         <div class="weather-details">
           <div class="detail-row">
             <span>💧 Humidity</span>
-            <span>60%</span>
+            <span>{{ hour.humidity }}%</span>
           </div>
           <div class="detail-row">
             <span>💨 Wind</span>
-            <span>18 km/h</span>
+            <span>{{ hour.wind }} km/h</span>
           </div>
           <div class="detail-row">
-            <span>☔ Rain</span>
-            <span>25%</span>
-          </div>
-        </div>
-      </li>
-
-      <li class="time-forecast">
-        <div class="time-label">Evening</div>
-        <div class="time-value">6:00 PM</div>
-        <div class="weather-icon">🌦️</div>
-        <div class="temperature">26°C</div>
-        <div class="feels-like">Feels like 28°C</div>
-        <div class="weather-desc">Light showers</div>
-        <div class="weather-details">
-          <div class="detail-row">
-            <span>💧 Humidity</span>
-            <span>75%</span>
-          </div>
-          <div class="detail-row">
-            <span>💨 Wind</span>
-            <span>20 km/h</span>
-          </div>
-          <div class="detail-row">
-            <span>☔ Rain</span>
-            <span>70%</span>
-          </div>
-        </div>
-      </li>
-
-      <li class="time-forecast night-time">
-        <div class="time-label">Night</div>
-        <div class="time-value">9:00 PM</div>
-        <div class="weather-icon">🌙</div>
-        <div class="temperature">20°C</div>
-        <div class="feels-like">Feels like 18°C</div>
-        <div class="weather-desc">Clear night</div>
-        <div class="weather-details">
-          <div class="detail-row">
-            <span>💧 Humidity</span>
-            <span>80%</span>
-          </div>
-          <div class="detail-row">
-            <span>💨 Wind</span>
-            <span>10 km/h</span>
-          </div>
-          <div class="detail-row">
-            <span>☔ Rain</span>
-            <span>10%</span>
-          </div>
-        </div>
-      </li>
-
-      <li class="time-forecast night-time">
-        <div class="time-label">Late Night</div>
-        <div class="time-value">12:00 AM</div>
-        <div class="weather-icon">🌌</div>
-        <div class="temperature">17°C</div>
-        <div class="feels-like">Feels like 15°C</div>
-        <div class="weather-desc">Starry night</div>
-        <div class="weather-details">
-          <div class="detail-row">
-            <span>💧 Humidity</span>
-            <span>90%</span>
-          </div>
-          <div class="detail-row">
-            <span>💨 Wind</span>
-            <span>6 km/h</span>
-          </div>
-          <div class="detail-row">
-            <span>☔ Rain</span>
-            <span>5%</span>
-          </div>
-        </div>
-      </li>
-
-      <li class="time-forecast night-time">
-        <div class="time-label">Pre-Dawn</div>
-        <div class="time-value">3:00 AM</div>
-        <div class="weather-icon">🌫️</div>
-        <div class="temperature">15°C</div>
-        <div class="feels-like">Feels like 12°C</div>
-        <div class="weather-desc">Light fog</div>
-        <div class="weather-details">
-          <div class="detail-row">
-            <span>💧 Humidity</span>
-            <span>95%</span>
-          </div>
-          <div class="detail-row">
-            <span>💨 Wind</span>
-            <span>4 km/h</span>
-          </div>
-          <div class="detail-row">
-            <span>☔ Rain</span>
-            <span>0%</span>
+            <span>🔥 Heat</span>
+            <span>{{ hour.heatInd }}</span>
           </div>
         </div>
       </li>
@@ -122,7 +35,74 @@
 </template>
 
 <script>
-export default {};
+export default {
+  props: ["isLoading", "apiResponse"],
+  data() {
+    return {
+      inHours: [],
+    };
+  },
+  watch: {
+    apiResponse: {
+      handler(newVal) {
+        if (newVal && Object.keys(newVal).length > 0) {
+          this.getHour(newVal);
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
+  methods: {
+    getHour(fetchedRes) {
+      let i = +fetchedRes.current.last_updated.slice(-5).slice(0, -3);
+      let k = 0;
+
+      let tempArr = [];
+
+      for (i++; tempArr.length < 5; i += 3) {
+        if (i >= 24) {
+          i = 0;
+          k = 1;
+        }
+        const common = fetchedRes.forecast.forecastday[k];
+        let tempObj = {
+          time: common.hour[i].time.slice(-5),
+          temp: common.hour[i].temp_c,
+          feelLike: common.hour[i].feelslike_c,
+          icon: common.hour[i].condition.icon,
+          desc: common.hour[i].condition.text,
+          humidity: common.hour[i].humidity,
+          wind: common.hour[i].wind_kph,
+          heatInd: common.hour[i].heatindex_c,
+        };
+        tempArr.push(tempObj);
+      }
+      this.inHours = tempArr;
+      console.log(this.inHours);
+    },
+    greet(abc) {
+      console.log(typeof abc, abc);
+      if (abc >= "04:00" && abc <= "06:00") return "Dawn";
+      if (abc >= "07:00" && abc <= "11:00") return "Morning";
+      if (abc >= "12:00" && abc <= "16:00") return "Afternoon";
+      if (abc >= "17:00" && abc <= "20:00") return "Evening";
+      if (abc >= "21:00" && abc <= "23:00") return "Night";
+      if (abc >= "00:00" && abc <= "03:00") return "Late Night";
+      else return "Failed";
+    },
+    nightClass(abc) {
+      // if (abc >= "04:00" && abc <= "06:00") return "night-time";
+      if (abc >= "21:00" && abc <= "23:00") return "night-time";
+      if (abc >= "00:00" && abc <= "06:00") return "night-time";
+      else return "";
+      //   return "night-time";
+      // return "";
+    },
+  },
+
+  computed: {},
+};
 </script>
 
 <style scoped>
