@@ -92,16 +92,12 @@ export default {
       else return "Failed";
     },
     nightClass(abc) {
-      // if (abc >= "04:00" && abc <= "06:00") return "night-time";
       if (abc >= "21:00" && abc <= "23:00") return "night-time";
       if (abc >= "00:00" && abc <= "06:00") return "night-time";
       else return "";
-      //   return "night-time";
-      // return "";
     },
   },
 
-  computed: {},
 };
 </script>
 

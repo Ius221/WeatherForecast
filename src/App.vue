@@ -52,7 +52,7 @@ export default {
       this.isLoading = true;
       try {
         const response = await fetch(
-          `http://api.weatherapi.com/v1/forecast.json?key=58eea9fae1ea43b4b0b125004251606&q=${this.location}&days=5&aqi=no&alerts=no`
+          `https://api.weatherapi.com/v1/forecast.json?key=58eea9fae1ea43b4b0b125004251606&q=${this.location}&days=5&aqi=no&alerts=no`
         );
 
         if (!response.ok)
