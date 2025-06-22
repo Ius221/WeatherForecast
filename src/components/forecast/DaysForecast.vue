@@ -1,26 +1,27 @@
 <template>
-  <!-- <div class="nearby-section"></div> -->
   <div class="forecast-container" v-if="!isLoading">
     <h1 class="section-title">❄️ WeatherOutlook</h1>
-    <ul class="forecast-list">
+    <ul class="forecast-list" v-for="(day, ind) in captureDay" :key="ind">
       <li class="forecast-item">
         <div class="day-info">
-          <div class="day-name">Today</div>
-          <div class="weather-icon">☀️</div>
-          <div class="weather-desc">Sunny and clear</div>
+          <div class="day-name">{{ day.date }}</div>
+          <div class="weather-icon">
+            <img :src="day.icon" alt="" />
+          </div>
+          <div class="weather-desc">{{ day.desc }}</div>
         </div>
         <div class="temperature">
-          <span class="temp-high">28°</span>
-          <span class="temp-low">15°</span>
+          <span class="temp-high">{{ day.maxTemp }}°</span>
+          <span class="temp-low">{{ day.minTemp }}°</span>
         </div>
         <div class="additional-info">
-          <div class="info-item">💧 20%</div>
-          <div class="info-item">💨 12 km/h</div>
-          <div class="info-item">👁️ 10 km</div>
+          <div class="info-item">🌅 {{ day.sunRise }}</div>
+          <div class="info-item">💨 {{ day.wind }} km/h</div>
+          <div class="info-item">🌇 {{ day.sunSet }}</div>
         </div>
       </li>
 
-      <li class="forecast-item">
+      <!-- <li class="forecast-item">
         <div class="day-info">
           <div class="day-name">Tomorrow</div>
           <div class="weather-icon">⛅</div>
@@ -120,14 +121,60 @@
           <div class="info-item">💨 16 km/h</div>
           <div class="info-item">👁️ 6 km</div>
         </div>
-      </li>
+      </li> -->
     </ul>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["isLoading"],
+  props: ["isLoading", "apiResponse"],
+  data() {
+    return {
+      captureDay: [],
+    };
+  },
+  watch: {
+    apiResponse: {
+      handler(newVal) {
+        if (newVal && Object.keys(newVal).length > 0) {
+          this.getDay(newVal);
+        }
+      },
+      immediate: true,
+      deep: true,
+    },
+  },
+  methods: {
+    getDay(fetchedRes) {
+      let tempArr = [];
+
+      for (let i = 0; i < 7; i++) {
+        const common = fetchedRes.forecast.forecastday[i];
+        let dateValue;
+        if (i === 0) dateValue = "Today";
+        else if (i === 1) dateValue = "Tomorrow";
+        else
+          dateValue = new Date(common.date).toLocaleDateString("en-US", {
+            weekday: "long",
+          });
+
+        let tempObj = {
+          date: dateValue,
+          icon: common.day.condition.icon,
+          maxTemp: common.day.maxtemp_c,
+          minTemp: common.day.mintemp_c,
+          desc: common.day.condition.text,
+          sunRise: common.astro.sunrise,
+          sunSet: common.astro.sunset,
+          wind: common.hour[0].wind_kph,
+        };
+        tempArr.push(tempObj);
+      }
+      this.captureDay = tempArr;
+      console.log(this.captureDay);
+    },
+  },
 };
 </script>
 
