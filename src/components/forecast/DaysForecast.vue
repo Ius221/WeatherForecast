@@ -20,108 +20,6 @@
           <div class="info-item">🌇 {{ day.sunSet }}</div>
         </div>
       </li>
-
-      <!-- <li class="forecast-item">
-        <div class="day-info">
-          <div class="day-name">Tomorrow</div>
-          <div class="weather-icon">⛅</div>
-          <div class="weather-desc">Partly cloudy</div>
-        </div>
-        <div class="temperature">
-          <span class="temp-high">25°</span>
-          <span class="temp-low">12°</span>
-        </div>
-        <div class="additional-info">
-          <div class="info-item">💧 35%</div>
-          <div class="info-item">💨 15 km/h</div>
-          <div class="info-item">👁️ 8 km</div>
-        </div>
-      </li>
-
-      <li class="forecast-item">
-        <div class="day-info">
-          <div class="day-name">Thursday</div>
-          <div class="weather-icon">🌧️</div>
-          <div class="weather-desc">Light rain showers</div>
-        </div>
-        <div class="temperature">
-          <span class="temp-high">22°</span>
-          <span class="temp-low">14°</span>
-        </div>
-        <div class="additional-info">
-          <div class="info-item">💧 75%</div>
-          <div class="info-item">💨 18 km/h</div>
-          <div class="info-item">👁️ 5 km</div>
-        </div>
-      </li>
-
-      <li class="forecast-item">
-        <div class="day-info">
-          <div class="day-name">Friday</div>
-          <div class="weather-icon">⛈️</div>
-          <div class="weather-desc">Thunderstorms</div>
-        </div>
-        <div class="temperature">
-          <span class="temp-high">20°</span>
-          <span class="temp-low">16°</span>
-        </div>
-        <div class="additional-info">
-          <div class="info-item">💧 90%</div>
-          <div class="info-item">💨 25 km/h</div>
-          <div class="info-item">👁️ 3 km</div>
-        </div>
-      </li>
-
-      <li class="forecast-item">
-        <div class="day-info">
-          <div class="day-name">Saturday</div>
-          <div class="weather-icon">🌤️</div>
-          <div class="weather-desc">Mostly sunny</div>
-        </div>
-        <div class="temperature">
-          <span class="temp-high">26°</span>
-          <span class="temp-low">13°</span>
-        </div>
-        <div class="additional-info">
-          <div class="info-item">💧 15%</div>
-          <div class="info-item">💨 10 km/h</div>
-          <div class="info-item">👁️ 12 km</div>
-        </div>
-      </li>
-
-      <li class="forecast-item">
-        <div class="day-info">
-          <div class="day-name">Sunday</div>
-          <div class="weather-icon">☁️</div>
-          <div class="weather-desc">Overcast</div>
-        </div>
-        <div class="temperature">
-          <span class="temp-high">23°</span>
-          <span class="temp-low">11°</span>
-        </div>
-        <div class="additional-info">
-          <div class="info-item">💧 45%</div>
-          <div class="info-item">💨 14 km/h</div>
-          <div class="info-item">👁️ 7 km</div>
-        </div>
-      </li>
-
-      <li class="forecast-item">
-        <div class="day-info">
-          <div class="day-name">Monday</div>
-          <div class="weather-icon">🌦️</div>
-          <div class="weather-desc">Scattered showers</div>
-        </div>
-        <div class="temperature">
-          <span class="temp-high">21°</span>
-          <span class="temp-low">13°</span>
-        </div>
-        <div class="additional-info">
-          <div class="info-item">💧 60%</div>
-          <div class="info-item">💨 16 km/h</div>
-          <div class="info-item">👁️ 6 km</div>
-        </div>
-      </li> -->
     </ul>
   </div>
 </template>
@@ -172,7 +70,6 @@ export default {
         tempArr.push(tempObj);
       }
       this.captureDay = tempArr;
-      console.log(this.captureDay);
     },
   },
 };

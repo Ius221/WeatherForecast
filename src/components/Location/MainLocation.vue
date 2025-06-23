@@ -11,6 +11,15 @@
         id="locationSearch"
         v-model="enteredLocation"
       />
+      <ul v-if="suggestions.length > 0">
+        <li
+          v-for="(item, index) in suggestions"
+          :key="index"
+          @click="selectSuggestion(item)"
+        >
+          {{ item.properties.formatted }}
+        </li>
+      </ul>
     </div>
     <button @click="ResponseEdited" class="search-button" id="searchButton">
       🔍
@@ -63,6 +72,9 @@ export default {
       enteredLocation: "",
       apiResponses: {},
       imgSrc: "",
+      //====================
+      suggestions: [],
+      debounceTimer: null,
     };
   },
 
@@ -76,13 +88,54 @@ export default {
       immediate: true,
       deep: true,
     },
+    enteredLocation(newVal) {
+      clearTimeout(this.debounceTimer);
+      if (!newVal || newVal.length < 3) {
+        this.suggestions = [];
+        return;
+      }
+      this.debounceTimer = setTimeout(() => {
+        this.fetchSuggestions();
+      }, 400);
+    },
   },
 
   methods: {
     async ResponseEdited() {
+      if (!this.enteredLocation || this.enteredLocation.length < 3) {
+        return;
+      }
       this.$emit("location-info", this.enteredLocation);
       this.enteredLocation = "";
+      this.suggestions = [];
     },
+
+    fetchSuggestions() {
+      if (!this.enteredLocation || this.enteredLocation.length < 3) {
+        this.suggestions = [];
+        return;
+      }
+      const apiKey = "a571225dc9e44438a9a697cb01f14404";
+      const url = `https://api.geoapify.com/v1/geocode/autocomplete?text=${encodeURIComponent(
+        this.enteredLocation
+      )}&limit=5&apiKey=${apiKey}`;
+
+      fetch(url)
+        .then((response) => response.json())
+        .then((data) => {
+          this.suggestions = data.features;
+        })
+        .catch((error) => {
+          console.error("Autocomplete error:", error);
+          this.suggestions = [];
+        });
+    },
+
+    selectSuggestion(item) {
+      this.enteredLocation = item.properties.formatted;
+      this.ResponseEdited();
+    },
+
     updateWeatherDetails(fetchedRes) {
       let tempObj = {
         city: fetchedRes.location.name,
@@ -133,11 +186,38 @@ export default {
       }
     },
   },
-
 };
 </script>
 
 <style scoped>
+/* Drop down suggestion */
+ul {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top: none;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+li {
+  padding: 10px 15px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+li:hover {
+  background-color: #f0f0f0;
+}
+
 /* Search Bar */
 .search-container {
   display: flex;
